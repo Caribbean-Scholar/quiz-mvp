@@ -1,6 +1,14 @@
 "use client";
 import { use, useState } from "react";
 import quizzes from "@/quizzes";
+import Link from "next/link";
+
+const getNextQuestion = (index: number, quizLength: number) => {
+  if (index + 2 > quizLength - 1) {
+    return "completed";
+  }
+  return `${index + 2}`;
+};
 
 export default function QuestionPage({
   params,
@@ -62,6 +70,17 @@ export default function QuestionPage({
             </li>
           ))}
         </ul>
+
+        {showAnswers ? (
+          <div className="flex justify-between mt-4">
+            <button>Read Explanation</button>
+            <Link
+              href={`${getNextQuestion(index, quiz.questions.length)}`}
+            >
+              Next Question
+            </Link>
+          </div>
+        ) : null}
       </div>
     </div>
   );

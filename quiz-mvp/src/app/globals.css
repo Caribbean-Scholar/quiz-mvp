@@ -10,6 +10,18 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --color-primary-900: #081b30;
+  --color-primary-700: #0f325a;
+  --color-primary-500: #206bc0;
+  --color-primary-300: #9fc4ef;
+  --color-primary-100: #e9f2fb;
+  --color-success-900: #193929;
+  --color-success-700: #327255;
+  --color-success-500: #4fb286;
+  --color-failure-500: #FF6600;
+  --color-gray-400: #29394b;
+  --color-hover-failure: #281729;
+  --color-hover-success: #13323d;
 }
 
 @media (prefers-color-scheme: dark) {

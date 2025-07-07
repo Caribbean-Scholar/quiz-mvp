@@ -4,7 +4,7 @@ import quizzes from "@/quizzes";
 import Link from "next/link";
 
 const getNextQuestion = (index: number, quizLength: number) => {
-  if (index + 2 > quizLength - 1) {
+  if (index + 2 > quizLength) {
     return "completed";
   }
   return `${index + 2}`;
@@ -53,17 +53,20 @@ export default function QuestionPage({
             <li key={index}>
               <button
                 onClick={() => handleOptionClick(index)}
-                className={`text-center w-full py-4 bg-gray-400  ${
-                  !showAnswers ? "hover:border-white" : null
-                } hover:cursor-pointer border-2 border-gray-400 ${
-                  question.answer === index && showAnswers
-                    ? "border-2 border-success-500 bg-hover-success hover:bg-hover-success"
-                    : null
-                } ${
-                  choice === index && showAnswers && choice !== question.answer
-                    ? "border-2 bg-hover-failure hover:bg-hover-failure"
-                    : null
-                }`}
+                className={`
+              text-center w-full py-4 border-2 hover:cursor-pointer 
+              ${!showAnswers ? "hover:border-white" : ""} 
+              ${
+                showAnswers && question.answer === index
+                  ? "border-success-500 bg-hover-success"
+                  : ""
+              }
+              ${
+                showAnswers && choice === index && choice !== question.answer
+                  ? "border-failure-500 bg-hover-failure"
+                  : "border-gray-400 bg-gray-400"
+              }
+            `}
               >
                 {option}
               </button>
@@ -74,9 +77,7 @@ export default function QuestionPage({
         {showAnswers ? (
           <div className="flex justify-between mt-4">
             <button>Read Explanation</button>
-            <Link
-              href={`${getNextQuestion(index, quiz.questions.length)}`}
-            >
+            <Link href={`${getNextQuestion(index, quiz.questions.length)}`}>
               Next Question
             </Link>
           </div>

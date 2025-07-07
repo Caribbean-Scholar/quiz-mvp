@@ -2,6 +2,7 @@ interface Quiz {
   name: string;
   subject: string;
   img: string;
+  slug: string;
   questions: Question[];
 }
 

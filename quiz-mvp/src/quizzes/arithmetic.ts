@@ -30,6 +30,7 @@ const basicArithmeticWarmUp: Question[] = [
 export const basicArithmeticQuiz: Quiz = {
   name: "Basic Arithmetic (Warm Up)",
   subject: "Mathematics",
+  slug: "arithmetic",
   img: "/img/basic-arithmetic.png",
   questions: basicArithmeticWarmUp,
 };

@@ -5,7 +5,7 @@ export default function Home() {
     <div>
       <h1>Caribbean Scholar Quiz App</h1>
       <ul>
-        <li><Link href="href">Math - Directed Numbers</Link></li>
+        <li><Link href="arithmetic/1">Math - Directed Numbers</Link></li>
       </ul>
     </div>
   );

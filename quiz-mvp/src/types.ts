@@ -12,3 +12,7 @@ interface Question {
   answer: number; // index of correct option (0-based)
   explanation?: string;
 }
+
+type Answer = number | null;
+
+type Attempt = Answer[];

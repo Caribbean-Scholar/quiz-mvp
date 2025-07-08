@@ -7,7 +7,7 @@ export default function Home() {
       <h1>Caribbean Scholar Quiz App</h1>
       <ul>
         {Array.from(quizzes.values()).map((quiz) => (
-          <li>
+          <li key={quiz.slug}>
             <Link href={`${quiz.slug}/1`}>{quiz.name}</Link>
           </li>
         ))}

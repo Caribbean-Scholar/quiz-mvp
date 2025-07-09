@@ -1,12 +1,52 @@
+"use client";
+import { createNewQuizAttempt } from "@/app/util";
+import quizzes from "@/quizzes";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { use, useEffect, useRef } from "react";
 
-export default function Completed() {
+export default function Completed({
+  params,
+}: {
+  params: Promise<{ quizName: string }>;
+}) {
+  const router = useRouter();
+  const { quizName } = use(params);
+  const attempt = useRef<Attempt>(
+    JSON.parse(localStorage.getItem(quizName) ?? "[]")
+  );
+  const quiz = quizzes.get(quizName);
+  let correct = 0;
+
+  for (let i = 0; i < quiz!.questions.length; i++) {
+    if (attempt.current[i] == quiz!.questions[i].answer) {
+      correct++;
+    }
+  }
+
+  if (!quiz) {
+    return;
+  }
+
+  useEffect(() => {
+    if (!quiz) {
+      router.push("/");
+      return;
+    }
+  }, [quiz]);
+
+  const handleStartOver = () => {
+    let newAttempt = createNewQuizAttempt(quiz);
+    localStorage.setItem(quizName, JSON.stringify(newAttempt));
+    router.push(`/${quiz.slug}/1`);
+  };
+
   return (
     <div className="bg-primary-900 h-screen text-white">
       <div className="w-9/12 mx-auto md:max-w-lg pt-16">
         <span className="block text-center mb-1 font-bold">Final Score</span>
         <span className="block text-center font-bold text-success-500 mb-4 text-3xl">
-          4/5
+          {correct}/{quiz!.questions.length}
         </span>
 
         <h1 className="text-center text-3xl font-bold mb-1">
@@ -39,7 +79,7 @@ export default function Completed() {
             <Link href="/">Try another quiz</Link>
           </li>
           <li className="mb-4">
-            <Link href="#">Start Over</Link>
+            <button onClick={handleStartOver}>Start Over</button>
           </li>
         </ul>
       </div>

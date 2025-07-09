@@ -1,7 +1,9 @@
 "use client";
-import { use, useState } from "react";
+import { use, useEffect, useRef, useState } from "react";
 import quizzes from "@/quizzes";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { findFirstUnanswered } from "@/app/util";
 
 const getNextQuestion = (index: number, quizLength: number) => {
   if (index + 2 > quizLength) {
@@ -15,28 +17,56 @@ export default function QuestionPage({
 }: {
   params: Promise<{ quizName: string; questionId: number }>;
 }) {
+  const router = useRouter();
   const { quizName, questionId } = use(params);
   const [choice, setChoice] = useState<number | null>(null);
-  const [showAnswers, setShowAnswers] = useState<boolean>(false);
+  const [loading, setLoading] = useState(true);
+  const attempt = useRef<Attempt>(
+    JSON.parse(localStorage.getItem(quizName) as string)
+  );
+  const showAnswers = choice !== null;
+
   const quiz = quizzes.get(quizName);
   const index = questionId - 1;
 
-  if (!quiz) {
-    return "Quiz not found";
-  }
+  useEffect(() => {
+    if (!quiz) {
+      router.push("/");
+      return;
+    }
 
-  if (index < 0 || index > quiz.questions.length - 1) {
-    return "Invalid question Id";
-  }
+    let found = findFirstUnanswered(attempt.current);
+
+    if (found == -1) {
+      router.replace("completed");
+      return;
+    }
+
+    if (found != index) {
+      router.replace(`${found + 1}`);
+      return;
+    }
+
+    setLoading(false);
+  }, [quiz]);
+
+  if (!quiz) return null;
 
   const question = quiz.questions[index];
 
-  const handleOptionClick = (index: number) => {
+  const handleOptionClick = (answer: number) => {
     if (choice === null) {
-      setChoice(index);
-      setShowAnswers(true);
+      attempt.current[index] = answer;
+      localStorage.setItem(quizName, JSON.stringify(attempt.current));
+      setChoice(answer);
     }
   };
+
+  if (loading) {
+    return (
+      <div className="bg-primary-900 h-screen text-white flex items-center justify-center"></div>
+    );
+  }
 
   return (
     <div className="bg-primary-900 h-screen text-white">

@@ -21,9 +21,7 @@ export default function QuestionPage({
   const { quizName, questionId } = use(params);
   const [choice, setChoice] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
-  const attempt = useRef<Attempt>(
-    JSON.parse(localStorage.getItem(quizName) as string)
-  );
+  const [attempt, setAttempt] = useState<Attempt>([]);
   const showAnswers = choice !== null;
 
   const quiz = quizzes.get(quizName);
@@ -35,7 +33,9 @@ export default function QuestionPage({
       return;
     }
 
-    let found = findFirstUnanswered(attempt.current);
+    let currentAttempt = JSON.parse(localStorage.getItem(quizName) ?? "[]");
+
+    let found = findFirstUnanswered(currentAttempt);
 
     if (found == -1) {
       router.replace("completed");
@@ -48,6 +48,7 @@ export default function QuestionPage({
     }
 
     setLoading(false);
+    setAttempt(currentAttempt);
   }, [quiz]);
 
   if (!quiz) return null;
@@ -56,8 +57,8 @@ export default function QuestionPage({
 
   const handleOptionClick = (answer: number) => {
     if (choice === null) {
-      attempt.current[index] = answer;
-      localStorage.setItem(quizName, JSON.stringify(attempt.current));
+      attempt[index] = answer;
+      localStorage.setItem(quizName, JSON.stringify(attempt));
       setChoice(answer);
     }
   };

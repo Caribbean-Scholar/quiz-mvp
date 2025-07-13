@@ -28,9 +28,9 @@ const basicArithmeticWarmUp: Question[] = [
 ];
 
 export const basicArithmeticQuiz: Quiz = {
-  name: "Basic Arithmetic (Warm Up)",
+  name: "Warm Up",
   subject: "Mathematics",
   slug: "arithmetic",
-  img: "/img/basic-arithmetic.png",
+  img: "/blue-bg.svg",
   questions: basicArithmeticWarmUp,
 };
